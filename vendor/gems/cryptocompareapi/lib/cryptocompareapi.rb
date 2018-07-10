@@ -11,7 +11,7 @@ module Cryptocompareapi
 		HTTParty.get('https://min-api.cryptocompare.com/data/all/exchanges')
 		# have to use json to parse
 	end
-
+#Currently no way (through APIs I've seen [coinmarketcap and cryptocompare]) to pull data on top exchanges: need physical list of top exchanges, compare against these outputs based on coin
 	def self.top_exchanges(ticker, currency = 'USD')
 		x = HTTParty.get("https://min-api.cryptocompare.com/data/top/exchanges/full?fsym=#{ticker}&tsym=#{currency}&limit=5")["Response"]
 		if x == "Error"
@@ -29,22 +29,31 @@ module Cryptocompareapi
 	end
 
 	def self.event(ticker, currency = 'USD', time)
-		x = Date.parse("#{time}").to_time.to_i + 259200
+		x = Date.parse("#{time}").to_time.to_i + 345600
 		y = HTTParty.get("https://min-api.cryptocompare.com/data/histoday?fsym=#{ticker}&tsym=#{currency}&limit=6&aggregate=1&toTs=#{x}")
-		z = y["Data"][0..6].map{ |x| x["low"] }
-		a = y["Data"][0..6].map{ |x| x["high"] }
-		b = y["Data"][0..6].map{ |x| x["time"] }
-		lowhigh = [z.min, a.max]
-		return b
+		z = y["Data"][0..6]
+		low = z.map{ |x| x["low"] }
+		high = z.map{ |x| x["high"] }
+		time = z.map{ |x| x["time"] }
+		lowhigh = [low.min, high.max]
+		data = [low, high, time]
+		return data
 	end
 
 	def self.alltime_high(ticker, currency = 'USD', time)
 		x = Date.parse("#{time}").to_time.to_i
 		y = HTTParty.get("https://min-api.cryptocompare.com/data/histoday?fsym=#{ticker}&tsym=#{currency}&limit=90&aggregate=1&toTs=#{x}")
+		z = HTTParty.get("https://min-api.cryptocompare.com/data/price?fsym=#{ticker}&tsyms=USD")["USD"]
 		a = y["Data"][0..90].map{ |x| x["high"] }
 		b = y["Data"][0..90].map{ |x| x["time"] }
 		alltimehigh = a.max
-		return b
+		percent = (a.max/z)*100
+			if percent < 250
+				return "within 250% range from 90 day high price. price today is #{z}, 90 day high is #{alltimehigh}"
+			else 
+				return "not within 250% range of 90 day high price, price today is #{z}, 90 day high is #{alltimehigh}"
+			end
+		#return percent
 	end
 end
 

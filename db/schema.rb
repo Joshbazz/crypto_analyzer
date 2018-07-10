@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_02_104811) do
+ActiveRecord::Schema.define(version: 2018_07_02_105555) do
 
   create_table "Cryptocurrency", force: :cascade do |t|
     t.string "ticker"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 2018_07_02_104811) do
 
   create_table "cryptos", force: :cascade do |t|
     t.string "ticker"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cryptotickers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
