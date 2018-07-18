@@ -55,5 +55,18 @@ module Cryptocompareapi
 			end
 		#return percent
 	end
+
+	#work in progress of model 2. user looks at coinmarketcap under recently added coins, finds coin ticker, inputs ticker and current date (yyy-mm-dd)
+	#listing_open: finds the opening price from last 7 days (should be equivalent to listing price b/c they are all less than or equal to 7 days old)
+	#high: finds highest spot price from last 7 days
+	#divides high by listing => if returns greater than 200, coin has seen 200% increase in price since listing already
+	def self.new_coin(ticker, currency = 'USD', time)
+		x = Date.parse("#{time}").to_time.to_i
+		price_7_days = HTTParty.get("https://min-api.cryptocompare.com/data/histoday?fsym=#{ticker}&tsym=#{currency}&limit=7&aggregate=1&toTs=#{x}")
+		high = price_7_days["Data"][0..7].map{ |x| x["high"] }.max
+		listing_open = price_7_days["Data"].first["open"]
+		return (high/listing_open)*100
+	end
+
 end
 
