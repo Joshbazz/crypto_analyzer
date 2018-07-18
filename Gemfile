@@ -36,11 +36,10 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'coinmarketcap', path: "/mnt/c/code/environment/crypto_analyzer/vendor/gems/coinmarketcap"
-
+gem 'haml'
 gem 'cryptocompare'
-
-gem 'cryptocompareapi', path: "/mnt/c/code/environment/crypto_analyzer/vendor/gems/cryptocompareapi"
+gem 'coinmarketcap'
+gem 'pry'
 
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'

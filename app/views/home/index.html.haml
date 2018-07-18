@@ -1,0 +1,26 @@
+%body
+  %form
+    .form-group
+      %label{for: "testcryptoticker"} Crypto Ticker
+      %input#testcryptoticker.form-control{"aria-describedby" => "cryptoHelp", placeholder: "Enter ticker", type: "ticker"}/
+  %h2 Crypto Tracker
+  .table-responsive
+    %table.table.table-striped.table-sm
+      %thead
+        %tr
+          %th Name
+          %th Market Cap %
+          %th Price(USD)
+          %th Rank
+          %th %Change 1hr
+          %th %Change 24hr
+          %th %Change 7days
+      %tbody
+        %tr
+          -#%td= Coinmarketcap.coin('bitcoin')[0]["name"]
+          -#%td= Coinmarketcap.percent_marketcap('bitcoin')
+          -#%td= Coinmarketcap.coin('bitcoin')[0]["price_usd"]
+          -#%td= Coinmarketcap.coin('bitcoin')[0]["rank"]
+          -#%td= Coinmarketcap.coin('bitcoin')[0]["percent_change_1h"]
+          -#%td= Coinmarketcap.coin('bitcoin')[0]["percent_change_24h"]
+          -#%td= Coinmarketcap.coin('bitcoin')[0]["percent_change_7d"]
